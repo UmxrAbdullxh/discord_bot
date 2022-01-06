@@ -5,22 +5,26 @@ import requests
 import json
 from discord import client
 from discord.ext import tasks
+from datetime import datetime
 
 client = discord.Client()
 
 fav_list = ''
 target_channel_id = int(os.environ.get('CHANNEL_ID'))
 
+today = datetime.today().strftime('%A')
+day = today[0].lower() + today[1:]
+
 def get_schedule():
     lst = []
-    url = "https://jikan1.p.rapidapi.com/schedule/sunday"
+    url = "https://jikan1.p.rapidapi.com/schedule/" + day
     headers = {
     'x-rapidapi-host': "jikan1.p.rapidapi.com",
     'x-rapidapi-key': os.environ.get('API_KEY')
     }
     response = requests.request("GET", url, headers=headers)
     txt = json.loads(response.text)
-    res = txt['sunday']
+    res = txt[day]
     for i in range(0, len(res)):
         final_res=res[i]['title']
         lst.append(final_res)
